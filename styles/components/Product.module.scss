@@ -1,0 +1,25 @@
+.productCards {
+  width: 250px;
+  height: 332px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  position: relative;
+
+  .price {
+    color: red;
+  }
+
+  &:hover {
+    transition: transform 0.4s ease-in-out;
+    transform: scale(1.1);
+    border: 1px solid #e8cd62;
+  }
+}
