@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from "react";
+import {
+  getAllProductsData,
+  getAllProductStockAndData,
+} from "../../api/fetcher";
 import myApi from "../../api/myApi";
 import Header from "../../components/header";
 import ProductList from "../../components/itemlist";
 import { API_KEYS, API_URL, END_POINT, ProductItem } from "../../constants";
 
-const ProductPage = () => {
-  const [listProduct, setListProduct] = useState<ProductItem[]>([]);
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-      } catch (err) {
-        console.log(err);
-      }
-      const res = await myApi.get(`${API_URL}${END_POINT.product}`);
-      console.log(res, "res");
-      setListProduct(res.data.records);
-    };
-
-    init();
-  }, []);
+const ProductPage = (props: any) => {
+  const { listProduct, listStock } = props;
 
   return (
     <div>
-      <Header />
-      <ProductList products={listProduct} />
+      <ProductList products={listProduct} listStock={listStock} />
     </div>
   );
 };
 
 export default ProductPage;
+
+export async function getServerSideProps({ req, res }: any) {
+  const { listProduct, listStock } = await getAllProductStockAndData();
+
+  return {
+    props: {
+      listProduct,
+      listStock,
+    }, // will be passed to the page component as props
+  };
+}
