@@ -6,7 +6,7 @@ import {
   getSingleProductStockNumber,
 } from "../../api/fetcher";
 import Product from "../../components/product";
-import { fakeImgUrl } from "../../constants";
+import { ErrorMsg, fakeImgUrl } from "../../constants";
 import { renderStockDescription } from "../../helpers";
 import styles from "../../styles/components/SingleProductPage.module.scss";
 
@@ -65,17 +65,23 @@ export default SingleProductPage;
 
 export async function getServerSideProps({ params: { slug } }: any) {
   const productDataDetail: any = await getSingleProductData(slug);
-  console.log(productDataDetail.fields.Id, "idddd");
+  console.log(productDataDetail, "idddd");
+
+  // In case no detail data of Product , return 404 page.
+  if (productDataDetail.notFound) {
+    return {
+      notFound: true,
+    };
+  }
+
+  //In case the Products ID are valids , we continues to get it reviews nad stock
 
   const productStock: number = await getSingleProductStockNumber(
     productDataDetail.fields.Id
   );
-
   const singleReview: any = await getSingleProductReview(
     productDataDetail.fields.Id
   );
-
-  console.log(singleReview, "singleReview");
 
   return {
     props: {

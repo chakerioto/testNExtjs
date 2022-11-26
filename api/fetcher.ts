@@ -1,4 +1,10 @@
-import { API_URL, END_POINT, headers, ProductItem } from "./../constants/index";
+import {
+  API_URL,
+  END_POINT,
+  ErrorMsg,
+  headers,
+  ProductItem,
+} from "./../constants/index";
 
 export const singleProductPromise = async (slug: any) => {
   const url = `${API_URL}${END_POINT.product}/${slug}`;
@@ -15,19 +21,18 @@ export const getSingleProductData = async (slug: any) => {
   const response = await fetch(urlSingleData, {
     headers: headers,
   });
-  if (response.status !== 200) {
-    console.log("not get the result");
-    throw new Error("Could not get the result");
+  const singleProductData = await response.json();
+  if (singleProductData.error === ErrorMsg.notFound) {
+    return {
+      notFound: true,
+    };
   }
-
-  productData = response.json();
-
+  productData = singleProductData;
   return productData;
 };
 
 export const singleProductStockPromise = async (slug: any) => {
   const url = `${API_URL}${END_POINT.stockSingle}${slug}`;
-  console.log(url, "url");
   const response = await fetch(url, {
     headers: headers,
   });
@@ -36,7 +41,6 @@ export const singleProductStockPromise = async (slug: any) => {
 
 export const singleProductReviewPromise = async (slug: any) => {
   const url = `${API_URL}${END_POINT.reviewSingle}${slug}`;
-  console.log("url", url);
   const response = await fetch(url, {
     headers: headers,
   });
@@ -45,12 +49,14 @@ export const singleProductReviewPromise = async (slug: any) => {
 
 export const getSingleProductStockNumber = async (_id: number) => {
   let stock = 0;
-  const res = await singleProductStockPromise(_id);
-
-  if (res.records.length) {
-    stock = res.records[0].fields.Stock || 0;
+  try {
+    const res = await singleProductStockPromise(_id);
+    if (res.records.length) {
+      stock = res.records[0].fields.Stock || 0;
+    }
+  } catch (error) {
+    console.log(error);
   }
-
   return stock;
 };
 
@@ -86,14 +92,13 @@ export const getAllProductsData = async () => {
   const response = await fetch(urlAlldata, {
     headers: headers,
   });
-
-  if (response.status !== 200) {
-    throw new Error("Could not get the result");
+  if (response.ok) {
+    const data = await response.json();
+    listProduct = data.records;
+    return listProduct;
+  } else {
+    return listProduct;
   }
-  const data = await response.json();
-  let tempData = JSON.parse(JSON.stringify(data));
-  listProduct = tempData.records;
-  return listProduct;
 };
 
 export const getAllProductStockAndData = async () => {
