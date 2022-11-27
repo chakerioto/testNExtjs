@@ -11,12 +11,10 @@ interface ProductProps {
 }
 
 const Product = ({ item, stock }: ProductProps) => {
-  console.log(stock);
-
   return (
     <>
       <Link href={`/product/${item.id}`}>
-        <div className={styles.productCards}>
+        <div className={styles.productCards} data-testid="product">
           <Image
             src={item.fields.pictures[0].url}
             alt="product-img"

@@ -21,7 +21,7 @@ const ProductList = ({ products, listStock }: ItemListProps) => {
   return (
     <>
       {products.length ? (
-        <div className={styles.itemListContainer}>
+        <div role="product-data" className={styles.itemListContainer}>
           {products.map((el, index) => {
             return (
               <Product
@@ -33,7 +33,7 @@ const ProductList = ({ products, listStock }: ItemListProps) => {
           })}
         </div>
       ) : (
-        <div>Ooops , There were no Products</div>
+        <div role="nodata">Ooops , There were no Products</div>
       )}
     </>
   );

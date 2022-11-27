@@ -11,11 +11,7 @@ import { API_KEYS, API_URL, END_POINT, ProductItem } from "../../constants";
 const ProductPage = (props: any) => {
   const { listProduct, listStock } = props;
 
-  return (
-    <div>
-      <ProductList products={listProduct} listStock={listStock} />
-    </div>
-  );
+  return <ProductList products={listProduct} listStock={listStock} />;
 };
 
 export default ProductPage;
@@ -23,6 +19,7 @@ export default ProductPage;
 export async function getServerSideProps({ req, res }: any) {
   const { listProduct, listStock } = await getAllProductStockAndData();
 
+  console.log(listProduct, "listProduct");
   return {
     props: {
       listProduct,
