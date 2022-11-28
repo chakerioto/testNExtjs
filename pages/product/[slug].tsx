@@ -34,7 +34,7 @@ const SingleProductPage = (props: any) => {
             ? singleReview.map((el: any, index: any) => {
                 return (
                   <>
-                    <div className={styles.reviews}>
+                    <div className={styles.reviews} key={index}>
                       <div>
                         <Image
                           src={fakeImgUrl.img1}
